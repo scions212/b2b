@@ -1,0 +1,42 @@
+<h1> {{titleC}} </h1>
+<hr>
+
+<form #formContacto="ngForm" (ngSubmit)="onSubmit(formContacto)">
+  <div class="container">
+  <div class="form-group">
+    <span *ngIf="name.touched && !name.valid">* Datos obligarorio</span><br>
+    <strong><label for="name"> Nombre  </label><br></strong>
+    <input type="text" name="name "placeholder="Ejemplo: Andres " #name="ngModel" [(ngModel)]="contact.name" required>
+    
+  </div>
+  <div class="form-group">
+    <span *ngIf="lastname.touched && !lastname.valid">* Datos obligarorio</span><br>
+    <strong><label for="lastname"> Apellido  </label><br></strong>
+      <input type="text" name="lastname "placeholder="Ejemplo: Rodriguez " #lastname="ngModel" [(ngModel)]="contact.lastname" required>
+      
+  </div>
+  <div class="form-group">
+      <span *ngIf="email.touched && !email.valid">* Datos obligarorio</span><br>
+      <strong><label for="email"> Email  </label><br></strong>
+      <input type="text" name="email "placeholder="Ejemplo@Ejemplo.com " #email="ngModel" [(ngModel)]="contact.email" required>
+  </div>
+  <div class="form-group">
+    <strong><label for="message">Mensaje </label><br></strong><br>
+      <textarea name="message" placeholder=" Escribir tu mensaje aqui "#message="ngModel" [(ngModel)]="contact.message" required></textarea>
+  </div><br>
+ 
+</div>
+
+<div class="container">
+  <button type="submit" class="btn btn-secondary btn-lg" [disabled]="!formContacto.form.valid">   Enviar   </button> 
+</div>
+</form>
+
+
+
+<!-- Image of location/map
+<div class="w3-container">
+  <img src="/w3images/map.jpg" class="w3-image" style="width:100%">
+</div> -->
+
+

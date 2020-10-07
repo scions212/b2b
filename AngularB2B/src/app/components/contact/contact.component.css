@@ -1,0 +1,51 @@
+h1{
+  font-family: 'Oxygen', sans-serif;
+    font-size: 50px;
+    font-weight: 600px;
+    line-height: 80px;
+    color:white;
+    align-content: center;
+    padding-top: 60px;
+    justify-content: center;
+    text-align: center;
+        
+}
+hr {
+    height: 5px;
+    width: 50%;
+    background-color:white;
+  }
+
+  .container {
+    font-size: 20px;
+    width: 50%;
+    color:white;
+    padding-top :30px;
+    text-align: center;
+    }
+    
+    span{
+      color:white;
+    }
+    
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="imail"],
+    form textarea{
+      width: 60%;
+      padding: 5px;
+    }
+
+    .btn{
+      cursor: pointer;
+      background: rgb(125, 137, 158);
+      width: 35%;
+      font-size: 20px;
+      margin-bottom: 30px;
+      color:white;
+    }
+        
+    
+
+
+    

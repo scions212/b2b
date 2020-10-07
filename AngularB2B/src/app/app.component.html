@@ -1,0 +1,79 @@
+
+
+  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light"> <!--Cabecera-->
+    <a class="navbar-brand" href="#"><img src="../assets/img/b2b.JPG" width="80" height="35" class="d-inline-block align-top" alt="">
+    </a>
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" routerLink="chat-dialog" id="chat-inbox"> Home <span class="sr-only">(current)</span>
+            <i class="fas fa-house-user" style="color:#ee2536;"></i></a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" routerLink="category" id="category">Category
+            <i class="far fa-folder-open" style="color:#ee2536;"></i>
+          </a>
+        </li>
+      </ul>
+      
+      <ul class="navbar-nav navbar-rigth">
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="singin">Sing In
+              <i class="fas fa-check-square" style="color:#ee2536;"></i>
+            </a>
+          </li>
+        
+        <li class="nav-item">
+          <a id="navbar-static-login" routerLink="singup" alt="Sign Up" class="btn btn-info btn-danger btn-rounded btn-sm" data-auth-modal-tab="sign-up">Sing Up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="contact" id="contact" router-link="activo" >Contact
+            <i class="fas fa-money-check" style="color:#ee2536;"></i></a> 
+          </li>
+      </ul>
+      <ul class="navbar-nav navbar-rigth">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" routerLink="config" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Config
+            <i class="fas fa-align-justify" style="color:#ee2536;"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Perfil 
+              <i class="far fa-address-card" style="color:#ee2536;"></i>
+            </a>
+            <a class="dropdown-item" href="#">Ajustes 
+              <i class="fas fa-user-shield" style="color:#ee2536;"></i>
+            </a>
+            <a class="dropdown-item" href="#"></a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Cerrar Sesion
+              <i class="fas fa-door-closed" style="color:#ee2536;"></i>
+            </a>
+          </div>
+        </li>
+      </ul>
+  
+    </div>
+  </nav>  <!--Cierre del contenerdor -->
+
+
+<body class="fondo">
+  <router-outlet> </router-outlet>
+
+</body>
+<div class="h5"><!--fooder-->
+  <footer class="bg-light text-center p-2">
+    <p class="h4">DomApps  <img src="../assets/img/domapps.JPG" width="50" height="35" class="d-inline-block align-top" alt=""></p>
+  </footer>
+</div>
+
+
+
