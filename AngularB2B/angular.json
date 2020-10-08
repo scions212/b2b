@@ -24,14 +24,14 @@
               "src/assets"
             ],
             "styles": [
-              
-              "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css",
               "./node_modules/froala-editor/css/froala_editor.pkgd.min.css",
               "./node_modules/froala-editor/css/froala_style.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/froala-editor/js/froala_editor.pkgd.min.js"
             ]
@@ -125,6 +125,10 @@
               "devServerTarget": "AngularB2B:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     }
