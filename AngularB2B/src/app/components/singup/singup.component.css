@@ -1,0 +1,12 @@
+h1{
+    text-align: center;
+    color:#ee2536;
+}
+.container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 10px; 
+    padding-bottom: 10px; 
+    /*padding-top: 66.66%;
+     /*16:9 Aspect Ratio */
+  }

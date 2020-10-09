@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "b2b-bot": {
+      "hosting": {
+        "AngularB2B": [
+          "b2b-bot"
+        ]
+      }
+    }
+  }
+}

@@ -1,1 +1,27 @@
-<p>singin works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1>LOGIN</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email"  class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">password</label>
+                        <input type="password"  class="form-control"/>
+                    </div>  
+                    <div class="container">
+                    <button class="btn btn-primary btn-lg btn-block">Login</button>
+                    </div>
+                </form> 
+                <div class="form-group mt-3">
+                    <p>Create an  account<a [routerLink]="['singup']"> Registre </a></p> 
+                </div>
+            </div>          
+        </div> 
+        </div>
+    </div>
+</div>
