@@ -4,21 +4,22 @@
         <div class="card">
             <div class="card-body">
                 <h1>LOGIN</h1>
-                <form>
+                <form [formGroup]="singinForm" (ngSubmit)="onSingin()">
+                    
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email"  class="form-control"/>
+                        <input type="email"  class="form-control"  formControlName="email"/>
                     </div>
                     <div class="form-group">
                         <label for="password">password</label>
-                        <input type="password"  class="form-control"/>
+                        <input type="password"  class="form-control" formControlName="password"/>
                     </div>  
                     <div class="container">
                     <button class="btn btn-primary btn-lg btn-block">Login</button>
                     </div>
                 </form> 
                 <div class="form-group mt-3">
-                    <p>Create an  account<a [routerLink]="['singup']"> Registre </a></p> 
+                    <p>Create an  account<a [routerLink]="['/singup']"> Registre </a></p> 
                 </div>
             </div>          
         </div> 

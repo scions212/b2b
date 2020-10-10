@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ChatModule } from './chat/chat.module';
 import { ReactiveFormsModule} from '@angular/forms';
+import { AngularFireModule} from '@angular/fire';
+import { AngularFireAuthModule} from '@angular/fire/auth';
+import { environment } from '../environments/environment';
 
 
 import { AppComponent } from './app.component';
@@ -16,6 +19,7 @@ import { SingupComponent } from './components/singup/singup.component';
 import { ContactComponent } from './components/contact/contact.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +29,7 @@ import { ContactComponent } from './components/contact/contact.component';
     SinginComponent,
     SingupComponent,
     ContactComponent,
-  
+    
   ],
   imports: [ 
             FormsModule,
@@ -33,7 +37,9 @@ import { ContactComponent } from './components/contact/contact.component';
             AppRoutingModule ,
             HttpClientModule,
             ChatModule,
-            ReactiveFormsModule          
+            ReactiveFormsModule,
+             AngularFireModule.initializeApp(environment.firebaseConfig),
+            AngularFireAuthModule,      
           ],
   providers: [],
   bootstrap: [AppComponent]

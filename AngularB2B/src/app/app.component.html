@@ -10,26 +10,26 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" routerLink="chat-dialog" id="chat-inbox"> Home <span class="sr-only">(current)</span>
+          <a class="nav-link" routerLink="chat-dialog" id="chat-inbox"> Home  <span class="sr-only">(current)</span>
             <i class="fas fa-house-user" style="color:#ee2536;"></i></a>
         </li>
       
-        <li class="nav-item">
+        <!--li class="nav-item">
           <a class="nav-link" routerLink="category" id="category">Category
             <i class="far fa-folder-open" style="color:#ee2536;"></i>
           </a>
-        </li>
+        </li-->
       </ul>
       
       <ul class="navbar-nav navbar-rigth">
 
-          <li class="nav-item">
+          <li class="nav-item active" *ngIf="!isLogged">
             <a class="nav-link" routerLink="singin">Sing In login
               <i class="fas fa-check-square" style="color:#ee2536;"></i>
             </a>
           </li>
         
-        <li class="nav-item">
+        <li class="nav-item active" *ngIf="!isLogged">
           <a id="navbar-static-login" routerLink="singup" class="btn btn-info btn-danger btn-rounded btn-sm" data-auth-modal-tab="sign-up">Sing Up registrar</a>
         </li>
         <li class="nav-item">
@@ -46,13 +46,14 @@
           <div class="dropdown-menu " style="background-color: #e3d7e8;" aria-labelledby="navbarDropdown">
             <a class="dropdown-item"  style="background-color:#e3d7e8;" href="#">Perfil 
               <i class="far fa-address-card" style="color:#ee2536;"></i>
+              {{user.email}}
             </a>
-            <a class="dropdown-item" style="background-color: #e3d7e8;"  href="#">Ajustes 
+            <!--a class="dropdown-item" style="background-color: #e3d7e8;"  href="#">Ajustes 
               <i class="fas fa-user-shield" style="color:#ee2536;"></i>
-            </a>
+            </a-->
             <a class="dropdown-item"  style="background-color: #e3d7e8;" href="#"></a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" style="background-color: #e3d7e8;" href="#">Logout
+            <a class="dropdown-item" style="background-color: #e3d7e8;" *ngIf="isLogged" (click)="onLogout" href="#">Logout
               <i class="fas fa-door-closed" style="color:#ee2536;"></i>
             </a>
           </div>
