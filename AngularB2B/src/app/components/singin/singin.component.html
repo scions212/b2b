@@ -8,18 +8,19 @@
                     
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email"  class="form-control"  formControlName="email"/>
+                        <input type="email"  class="form-control"  formControlName="email" placeholder="email@gmail.com" required/>
                     </div>
                     <div class="form-group">
                         <label for="password">password</label>
-                        <input type="password"  class="form-control" formControlName="password"/>
+                        <input type="password"  class="form-control" formControlName="password" placeholder="******" required/>
                     </div>  
                     <div class="container">
-                    <button class="btn btn-primary btn-lg btn-block">Login</button>
+                    <button type="botton" class="btn btn-primary btn-lg btn-block"  >Login</button>
+                    
                     </div>
                 </form> 
                 <div class="form-group mt-3">
-                    <p>Create an  account<a [routerLink]="['/singup']"> Registre </a></p> 
+                    <p>Create an  account<a routerLink="/singup"> Registre </a></p> 
                 </div>
             </div>          
         </div> 

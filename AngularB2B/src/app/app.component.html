@@ -1,75 +1,68 @@
 
 <nav class="navbar navbar-expand-lg  flex-column flex-md-row bd-navbar  navbar-dark" style="background: #d7d7dd;"> <!--Cabecera-->
-    <a class="navbar-brand" href="#"><img src="../assets/img/b2b.JPG" width="80" height="35" class="d-inline-block align-top" alt="">
-    </a>
-    <a class="navbar-brand" href="#"></a>
+  <a class="navbar-brand"  routerLink="home" ><img src="../assets/img/b2b.JPG" width="80" height="35" class="d-inline-block align-top" alt="">
+  </a>
+  <a class="navbar-brand" href="#"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" routerLink="chat-dialog" id="chat-inbox"> Home  <span class="sr-only">(current)</span>
+        <li class="nav-item active" > 
+          <a class="nav-link" routerLink="home" id="home">Home<span class="sr-only">(current)</span>
             <i class="fas fa-house-user" style="color:#ee2536;"></i></a>
         </li>
+      </ul>     
+        <ul class="navbar-nav" *ngIf="user$ | async as user; else login">
+          <li class="nav-item active" *ngIf="user"> 
+            <a class="nav-link" routerLink="chat-dialog" id="chat-inbox">Bot B2b<span class="sr-only">(current)</span>
+              <i class="fas fa-house-user" style="color:#ee2536;"></i></a>
+          </li> 
+        </ul> 
       
-        <!--li class="nav-item">
-          <a class="nav-link" routerLink="category" id="category">Category
-            <i class="far fa-folder-open" style="color:#ee2536;"></i>
-          </a>
-        </li-->
-      </ul>
-      
-      <ul class="navbar-nav navbar-rigth">
-
-          <li class="nav-item active" *ngIf="!isLogged">
+      <ng-template #login>
+        <ul class="navbar-nav navbar-rigth">
+          <li class="nav-item active" *ngIf="!user">
             <a class="nav-link" routerLink="singin">Sing In login
               <i class="fas fa-check-square" style="color:#ee2536;"></i>
             </a>
           </li>
-        
-        <li class="nav-item active" *ngIf="!isLogged">
-          <a id="navbar-static-login" routerLink="singup" class="btn btn-info btn-danger btn-rounded btn-sm" data-auth-modal-tab="sign-up">Sing Up registrar</a>
-        </li>
+          <li class="nav-item active" *ngIf="!user">
+            <a id="navbar-static-login" routerLink="singup" class="btn btn-info btn-danger btn-rounded btn-sm"
+            data-auth-modal-tab="sign-up">Sing Up registrar</a>
+          </li>
+        </ul>
+      </ng-template>
+
+      <ul class="navbar-nav navbar-rigth">
         <li class="nav-item">
           <a class="nav-link" routerLink="contact" id="contact" router-link="activo" >Contact
-            <i class="fas fa-money-check" style="color:#ee2536;"></i></a> 
-          </li>
-      </ul>
-      <ul class="navbar-nav navbar-rigth">
-        <li class="nav-item dropdown" style="background-color: #e3d7e8;">
-          <a class="nav-link dropdown-toggle" style="background-color: #e3d7e8;" routerLink="config" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Config
-            <i class="fas fa-align-justify" style="color:#ee2536;"></i>
-          </a>
-          <div class="dropdown-menu " style="background-color: #e3d7e8;" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item"  style="background-color:#e3d7e8;" href="#">Perfil 
-              <i class="far fa-address-card" style="color:#ee2536;"></i>
-              {{user.email}}
-            </a>
-            <!--a class="dropdown-item" style="background-color: #e3d7e8;"  href="#">Ajustes 
-              <i class="fas fa-user-shield" style="color:#ee2536;"></i>
-            </a-->
-            <a class="dropdown-item"  style="background-color: #e3d7e8;" href="#"></a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" style="background-color: #e3d7e8;" *ngIf="isLogged" (click)="onLogout" href="#">Logout
-              <i class="fas fa-door-closed" style="color:#ee2536;"></i>
-            </a>
-          </div>
+          <i class="fas fa-money-check" style="color:#ee2536;"></i></a> 
         </li>
-      </ul>
-  
-    </div>
-  </nav>  <!--Cierre del contenerdor -->
+      
+      <li class="nav-item dropdown" style="background-color: #e3d7e8;">
+        <a class="nav-link dropdown-toggle" routerLink="config" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Config
+           <i class="fas fa-align-justify" style="color:#ee2536;"></i>
+        </a>
+        <div class="dropdown-menu"  aria-labelledby="navbarDropdown" style="background-color:#e3d7e8;">
+          <li class="dropdown-item" style="background-color:#e3d7e8;"  href="#">Perfil {{user?.email}}
+            <i class="far fa-address-card" style="color:#ee2536;"></i>
+          </li>
+          <div class="dropdown-divider" style="background-color:#e3d7e8;" *ngIf="user"></div>
+          <a class="dropdown-item" style="background-color: #e3d7e8;"  (click)="onLogout()" href="#">Logout
+            <i class="fas fa-door-closed" style="color:#ee2536;"></i></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>  <!--Cierre del contenerdor -->
 <body class="fondo">
-  <router-outlet> </router-outlet>
+<router-outlet> </router-outlet>
 </body>
 <div class="h5"><!--fooder-->
-  <footer class="text-center p-2">
-    <p class="h4">DomApps  <img src="../assets/img/domapps.JPG" width="50" height="35" class="d-inline-block align-top"></p>
-  </footer>
+<footer class="text-center p-2">
+  <p class="h4">DomApps  <img src="../assets/img/domapps.JPG" width="50" height="35" class="d-inline-block align-top"></p>
+</footer>
 </div>
-
-
-

@@ -7,6 +7,7 @@ import {User} from 'firebase';
 @Injectable()
 export class AuthService {
   public user:User;
+  
 
   constructor( public AfAuth: AngularFireAuth) { }
 
@@ -21,7 +22,7 @@ async singin(email:string,password:any){
 }
 
 
-async singup(email:string,password:any,/*name:string,lastname:string,rpassword:any*/){
+async singup(email:string,password:any, /*name:string,lastname:string,rpassword:any*/){
   try{ 
     const result = await this.AfAuth.createUserWithEmailAndPassword(email,password/*,name,lastname,rpassword*/);
     return result;

@@ -9,7 +9,7 @@ import { Global } from '../../services/global';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css'],
   providers: [ContactService]
- 
+  
 })
 export class ContactComponent implements OnInit {
   public titleC:string;

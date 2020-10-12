@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl} from '@angular/forms';
 import { ReactiveFormsModule} from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-singup',
@@ -17,15 +19,22 @@ export class SingupComponent implements OnInit {
   password: new FormControl(''),
   rpassword:new FormControl(''),
 });
-  constructor( private authSvc:AuthService) { }
-
+  constructor( private authSvc:AuthService,  private router:Router) { }
+  
   ngOnInit(): void {
   }
 
-  onSingup(){
+  async onSingup(){
     const{ email,password}=this.singupForm.value;
-    this.authSvc.singup(email,password);
-    //form.reset();
-  }
-  
-}
+    try{
+      const user= await this.authSvc.singup(email,password);
+      if (user){
+        this.router.navigate(['/singin'])
+        alert("Usuario Guardado con exito");
+        }
+      }
+        catch(error){
+          console.log(error)}
+        }         
+};
+

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl} from '@angular/forms';
 import { ReactiveFormsModule} from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -15,13 +16,19 @@ export class SinginComponent implements OnInit {
   email:new FormControl(''),
   password: new FormControl(''),
 });
-  constructor( private authSvc:AuthService) { }
+  constructor( private authSvc:AuthService, private router:Router) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   
-  onSingin(){
-    const{ email,password}=this.singinForm.value;
-    this.authSvc.singup(email,password);
+  async onSingin(){
+    const{ password,email}=this.singinForm.value;
+    try{
+     const user= await this.authSvc.singin(email,password);
+     if (user){
+       this.router.navigate(['/home'])
+     }
+    }
+    catch(error){
+      console.log(error)}
     }
 };

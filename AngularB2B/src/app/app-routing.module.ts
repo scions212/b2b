@@ -15,7 +15,8 @@ import { ChatDialogComponent } from './components/chat-dialog/chat-dialog.compon
 
 
 const appRoutes : Routes=[
-  {path:'', component: HomeComponent},
+  {path:'', component: SinginComponent},
+  {path:'home', component: HomeComponent},
   {path:'chat-dialog', component: ChatDialogComponent},
   {path:'category', component: CategoryComponent},
   {path:'singin', component: SinginComponent},

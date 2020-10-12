@@ -10,6 +10,7 @@ import { AngularFireAuthModule} from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
 
+
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryComponent } from './components/category/category.component';
