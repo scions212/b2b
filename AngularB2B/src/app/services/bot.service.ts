@@ -24,7 +24,7 @@ export class BotService{
         let headers=new HttpHeaders().set('Content-type', 'application/json');
 
 
-        return this._http.post(this.url+'save-bot', params, {headers:headers});
+        return this._http.post(this.url+'POST_Message', params, {headers:headers});
     }
 
     getBots(): Observable<any> {

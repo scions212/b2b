@@ -26,7 +26,7 @@ var controller = {
 		contact.lastname = params.lastname;
 		contact.email = params.email;
 		contact.message = params.message;
-		
+		contact.image=params.image;		
 
 		contact.save((err, contactStored) => {
 			if(err) return res.status(500).send({message: 'Error al guardar la info.'});
@@ -97,9 +97,9 @@ var controller = {
 			});
 		});
 	},
-/*
+
 	uploadImage: function(req, res){
-		var projectId = req.params.id;
+		var contactId = req.params.id;
 		var fileName = 'Imagen no subida...';
 
 		if(req.files){
@@ -111,13 +111,13 @@ var controller = {
 
 			if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
 
-				Project.findByIdAndUpdate(projectId, {image: fileName}, {new: true}, (err, projectUpdated) => {
+				Contact.findByIdAndUpdate(contactId, {image: fileName}, {new: true}, (err, contactUpdated) => {
 					if(err) return res.status(500).send({message: 'La imagen no se ha subido'});
 
-					if(!projectUpdated) return res.status(404).send({message: 'El proyecto no existe y no se ha asignado la imagen'});
+					if(!contactUpdated) return res.status(404).send({message: 'El proyecto no existe y no se ha asignado la imagen'});
 
 					return res.status(200).send({
-						project: projectUpdated
+						contact: contactUpdated
 					});
 				});
 
@@ -149,7 +149,7 @@ var controller = {
 			}
 		});
 	}
-*/
+
 };
 
 module.exports = controller;

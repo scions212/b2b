@@ -10,7 +10,7 @@ import {Observable } from 'rxjs';
   styleUrls: ['./app.component.css'],
   providers:[AuthService]
 })
-export class AppComponent  implements OnInit { 
+export class AppComponent   { 
   title = 'AngularB2B';
   public isLogged=false;
 
@@ -18,22 +18,16 @@ export class AppComponent  implements OnInit {
   
 
   constructor( private authSvc:AuthService, private router:Router) {}
-    async ngOnInit(){
-   
-    }
-    async onLogout(){
 
+    async onLogout(){
       try{
        await this.authSvc.logout();
        this.router.navigate(['/home']);
       } catch(error) {
         console.log(error);
-      }
-      
+      }   
     }  
-    
- 
-   }
+  }
 
 
 

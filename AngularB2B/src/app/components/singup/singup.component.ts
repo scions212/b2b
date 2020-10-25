@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl} from '@angular/forms';
-import { ReactiveFormsModule} from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -23,9 +22,8 @@ export class SingupComponent implements OnInit {
   
   ngOnInit(): void {
   }
-
   async onSingup(){
-    const{ email,password}=this.singupForm.value;
+    const{email,password}=this.singupForm.value;
     try{
       const user= await this.authSvc.singup(email,password);
       if (user){
@@ -38,3 +36,4 @@ export class SingupComponent implements OnInit {
         }         
 };
 
+ 

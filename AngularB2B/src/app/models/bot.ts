@@ -2,11 +2,12 @@ export class Bot {
 
     constructor(
     
-        public id_message:Number,
-        public id_employee_origin:Number,
-        public id_employee_destiny:Number,
-        public message_content:String,
-        public date_message:Date,
-        public status_message_id:Number,
+        public groups :Array<String>,
+        public users : Array<String>,
+        public employee :Array<String>,
+        public departament:Array<String>,
+        public idStatusMessage:Array<String>,
+        public message:Array<String>,
+        public date: Date,
         ){} 
-    }
+}

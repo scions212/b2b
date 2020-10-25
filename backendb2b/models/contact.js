@@ -8,6 +8,7 @@ var ContactSchema = Schema({
 	lastname: String,
 	email: String,
 	message: String,
+	image:String,
 
 });
 

@@ -21,7 +21,7 @@ export class SinginComponent implements OnInit {
   ngOnInit(): void {}
   
   async onSingin(){
-    const{ password,email}=this.singinForm.value;
+    const{email,password}=this.singinForm.value;
     try{
      const user= await this.authSvc.singin(email,password);
      if (user){
