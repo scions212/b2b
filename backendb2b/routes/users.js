@@ -11,12 +11,12 @@ var multipartMiddleware = multipart({ uploadDir: './uploads' });
 
 router.get('/home', UserController.home);
 router.post('/test', UserController.test);
-router.post('/POST_User', UserController.saveUser);
-router.get('/GET_User/:id?', UserController.getUser);
-router.get('/GET_Users', UserController.getUsers);
-router.put('/PUT_User/:id', UserController.updateUser);
-router.delete('/DELETE_User/:id', UserController.deleteUser);
-router.post('/upload_image_user/:id', multipartMiddleware, UserController.uploadImage);
-router.get('/get-image/:image', UserController.getImageFile);
+router.post('/POST_USER', UserController.saveUser);
+router.get('/GET_USER/:id?', UserController.getUser);
+router.get('/GET_USERS', UserController.getUsers);
+router.put('/PUT_USER/:id', UserController.updateUser);
+router.delete('/DELETE_USER/:id', UserController.deleteUser);
+router.post('/UPLOAD_IMAGE_USER/:id', multipartMiddleware, UserController.uploadImage);
+router.get('/GET-IMAGE/:image', UserController.getImageFile);
 
 module.exports = router;

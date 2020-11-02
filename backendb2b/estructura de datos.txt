@@ -116,3 +116,8 @@ db.Chat.insert({
    
 
 
+
+
+
+var vendedor_2= {name: "antonio", sede:"miraflores, idcard:654321,}
+ var vendedor_2 ={name: "antonio", sede:"miraflores, idcard:654321,}

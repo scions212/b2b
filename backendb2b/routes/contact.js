@@ -10,12 +10,12 @@ var multipartMiddleware = multipart({ uploadDir: './uploads' });
 
 router.get('/home', ContactController.home);
 router.post('/test', ContactController.test);
-router.post('/save-contact', ContactController.saveContact); 
-router.get('/contact/:id?', ContactController.getContact);
-router.get('/contacts', ContactController.getContact);
-router.put('/contact/:id', ContactController.updateContac);
-router.delete('/project/:id', ContactController.deleteContact);
-router.post('/upload_image_contact/:id', multipartMiddleware, ContactController.uploadImage);
-router.get('/get-image/:image', ContactController.getImageFile);
+router.post('/POST_CONTACT', ContactController.saveContact); 
+router.get('/GET_CONTACT/:id?', ContactController.getContact);
+router.get('/GET_CONTACTs', ContactController.getContact);
+router.put('/PUT_CONTACT/:id', ContactController.updateContac);
+router.delete('/DELETE_CONTACT/:id', ContactController.deleteContact);
+router.post('/UPLOAD_IMAGE_contact/:id', multipartMiddleware, ContactController.uploadImage);
+router.get('/GET_IMAGE/:image', ContactController.getImageFile);
 
 module.exports = router;

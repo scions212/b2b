@@ -24,6 +24,7 @@ var controller = {
 
 		var params = req.body;
 		msg.idMessage = params.idMessage;
+		msg.idConversation=params.idConversation;  
 		msg.messageContent = params.messageContent;
 		msg.idStatusMessage = params.idStatusMessage;
 		msg.idUser = params.idUser;

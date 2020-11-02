@@ -11,12 +11,12 @@ var multipartMiddleware = multipart({ uploadDir: './uploads' });
 
 router.get('/home', MessageController.home);
 router.post('/test', MessageController.test);
-router.post('/POST_Message', MessageController.saveMsg);
-router.get('/GET_Message/:id?', MessageController.getMsg);
-router.get('/GET_Messages', MessageController.getMsgs);
-router.put('/PUT_Message/:id', MessageController.updateMsg);
-router.delete('/DELETE_Message/:id', MessageController.deleteMsg);
-router.post('/upload_image_msg/:id', multipartMiddleware, MessageController.uploadImage);
-router.get('/get-image/:image', MessageController.getImageFile);
+router.post('/POST_MESSAGE', MessageController.saveMsg);
+router.get('/POST_MESSAGE/:id?', MessageController.getMsg);
+router.get('/POST_MESSAGE', MessageController.getMsgs);
+router.put('/POST_MESSAGE/:id', MessageController.updateMsg);
+router.delete('/POST_MESSAGE/:id', MessageController.deleteMsg);
+router.post('/UPLOAD_IMAGE_MESSAGE/:id', multipartMiddleware, MessageController.uploadImage);
+router.get('/GET-IMAGE/:image', MessageController.getImageFile);
 
 module.exports = router;

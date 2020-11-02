@@ -23,18 +23,22 @@ var controller = {
 		var chat = new Chat();
 
 		var params = req.body;	
-		chat.nameCoversation=params.nameCoversation;
-		chat.idConversation=params.idConversation;
-		chat.idMessage=params.idMessage;
-		chat.departament=params.departament;
-		chat.dateChat=params.dateChat;
+		chat.nameChat=params.nameChat;
+		chat.idChat=params.idChat;
+		chat.idUser=params.idUser;
+		
+		chat.save((err, chatStored) => {
+			if (err) return res.status(500).send({
+				message: 'Error al guardar el documento.'
+			});
 
-	chat.save((err, chatStored) => {
-			if(err) return res.status(500).send({message: 'Error al guardar el documento.'});
+			if (!chatStored) return res.status(404).send({
+				message: 'No se ha podido guardar el proyecto.'
+			});
 
-			if(!chatStored) return res.status(404).send({message: 'No se ha podido guardar el proyecto.'});
-
-			return res.status(200).send({chat: chatStored});
+			return res.status(200).send({
+				msg: chatStored
+			});
 		});
 	},
 	getChat: function(req, res){

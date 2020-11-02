@@ -4,16 +4,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var MessageSchema = new Schema({
-	
-           	idMessage:Number,
-            messageContent : String,
-			idStatusMessage : Number,
-            idUser : Number,
-            urlFile :String,
-            dateMessage:
-                {type: Date},
-            
-            
+
+
+                idMessage:{ type:String, required:true, trim:true,unique:true},
+                messageContent: { type:String, required:true, trim:true },
+                idConversation:{ type:String, required:true, trim:true },
+                idStatusMessage: { type:Boolean, required:true, trim:true, unique:true },
+                idUser:{ type:String, required:true, trim:true, unique:true },
+                urlFile:{type:String,},
+            },{ 	versionKey:false,
+                    timestamps:true,
+           
 });
 
 module.exports = mongoose.model('Msg', MessageSchema);

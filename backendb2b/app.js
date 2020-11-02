@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const morgan = require('morgan');
 
 // cargar archivos rutas
 
@@ -15,8 +16,10 @@ var contact_routes = require('./routes/contact');
 
 
 // middlewares
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {

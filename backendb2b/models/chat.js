@@ -5,11 +5,12 @@ var Schema = mongoose.Schema;
 
 var ChatSchema = new Schema({
 
-			nameCoversacion:String,
-            idConversation:Number,
-            idMessage:Number,
-            departament : String,
-            dateChat:{type: Date},
+    nameChat:{ type:String, required:true, trim:true,unique:true},
+    idChat: { type:Number, required:true, trim:true },
+    idUser:{ type:Number, required:true, trim:true },
+    urlFile:{type:String,},
+},{ 	versionKey:false,
+        timestamps:true,
 });
 
 

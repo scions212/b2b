@@ -23,22 +23,31 @@ var controller = {
 		var user = new User();
 
 		var params = req.body;	
-        user.idUser=params.idUser;
-        user.name=params.name;
-		user.lastame=params.lastame;
-		user.idCard=params.idCard;
-		user.positionCompany=params.positionCompany;
-        user.idDepartament=params.idDepartament;
-        user.photoPerfil= null;
+        user.idUser = params.idUser;
+        user.name = params.name;
+		user.lastname = params.lastname;
+		user.email = params.email;
+		user.idCard = params.idCard;
+		user.positionCompany = params.positionCompany;
+        user.departament = params.departament;
+        user.photoPerfile = null;
 
-    user.save((err, userStored) => {
-			if(err) return res.status(500).send({message: 'Error al guardar el documento.'});
+		user.save((err, userStored) => {
+			if (err) return res.status(500).send({
+				message: 'Error al guardar el documento.'
+			});
 
-			if(!userStored) return res.status(404).send({message: 'No se ha podido guardar el proyecto.'});
+			if (!userStored) return res.status(404).send({
+				message: 'No se ha podido guardar el proyecto.'
+			});
 
-			return res.status(200).send({user: userStored});
+			return res.status(200).send({
+				user: userStored
+			});
 		});
 	},
+
+	
 	getUser: function(req, res){
 		var userId = req.params.id;
 
@@ -106,7 +115,7 @@ var controller = {
 		var fileName = 'Imagen no subida...';
 
 		if(req.files){
-			var filePath = req.files.photoPerfil.path;
+			var filePath = req.files.photoPerfile.path;
 			var fileSplit = filePath.split('\\');
 			var fileName = fileSplit[1];
 			var extSplit = fileName.split('\.');
@@ -114,7 +123,7 @@ var controller = {
 
 			if(fileExt == 'png' || fileExt == 'JPG' ||fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
 
-				User.findByIdAndUpdate(userId, {photoPerfil: fileName}, {new: true}, (err, userUpdated) => {
+				User.findByIdAndUpdate(userId, {photoPerfile: fileName}, {new: true}, (err, userUpdated) => {
 					if(err) return res.status(500).send({message: 'La imagen no se ha subido'});
 
 					if(!userUpdated) return res.status(404).send({message: 'El proyecto no existe y no se ha asignado la imagen'});
@@ -139,7 +148,7 @@ var controller = {
 	},
 
 	getImageFile: function(req, res){
-		var file = req.params.photoPerfil;
+		var file = req.params.photoPerfile;
 		var path_file = './uploads/'+file;
 
 		fs.exists(path_file, (exists) => {

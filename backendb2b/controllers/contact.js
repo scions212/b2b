@@ -25,8 +25,9 @@ var controller = {
 		contact.name = params.name;
 		contact.lastname = params.lastname;
 		contact.email = params.email;
-		contact.message = params.message;
-		contact.image=params.image;		
+		contact.idUser=params.idUser;
+		contact.nph=params.nph;
+		contact.image=null;	
 
 		contact.save((err, contactStored) => {
 			if(err) return res.status(500).send({message: 'Error al guardar la info.'});
