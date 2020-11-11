@@ -12,6 +12,9 @@ var chat_routes = require('./routes/chat');
 var message_routes = require('./routes/message');
 var user_routes = require('./routes/users');
 var contact_routes = require('./routes/contact');
+var usuario_routes = require('./routes/usuario');
+var group_routes= require('./routes/group');
+var mensaje_routes= require('./routes/mensaje');
 
 
 
@@ -55,6 +58,11 @@ app.use('/api', chat_routes);
 app.use('/api', message_routes);
 app.use('/api', user_routes);
 app.use('/api', contact_routes);
+app.use('/api', usuario_routes);
+app.use('/api', group_routes);
+app.use('/api', mensaje_routes);
+
+
 
 
 // exportar

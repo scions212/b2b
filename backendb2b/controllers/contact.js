@@ -22,14 +22,12 @@ var controller = {
 		var contact = new Contact();
 
 		var params = req.body;
-		contact.name = params.name;
-		contact.lastname = params.lastname;
-		contact.email = params.email;
 		contact.idUser=params.idUser;
 		contact.nph=params.nph;
-		contact.image=null;	
+	
 
 		contact.save((err, contactStored) => {
+			console.log(err)
 			if(err) return res.status(500).send({message: 'Error al guardar la info.'});
 
 			if(!contactStored) return res.status(404).send({message: 'No se ha podido guardar el contacto.'});
@@ -104,7 +102,7 @@ var controller = {
 		var fileName = 'Imagen no subida...';
 
 		if(req.files){
-			var filePath = req.files.image.path;
+			var filePath = req.files.photoProfile.path;
 			var fileSplit = filePath.split('\\');
 			var fileName = fileSplit[1];
 			var extSplit = fileName.split('\.');
@@ -112,7 +110,7 @@ var controller = {
 
 			if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
 
-				Contact.findByIdAndUpdate(contactId, {image: fileName}, {new: true}, (err, contactUpdated) => {
+				Contact.findByIdAndUpdate(contactId, {photoProfile: fileName}, {new: true}, (err, contactUpdated) => {
 					if(err) return res.status(500).send({message: 'La imagen no se ha subido'});
 
 					if(!contactUpdated) return res.status(404).send({message: 'El proyecto no existe y no se ha asignado la imagen'});
@@ -137,7 +135,7 @@ var controller = {
 	},
 
 	getImageFile: function(req, res){
-		var file = req.params.image;
+		var file = req.params.photoProfile;
 		var path_file = './uploads/'+file;
 
 		fs.exists(path_file, (exists) => {

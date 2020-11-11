@@ -22,12 +22,12 @@ var controller = {
 		var project = new Project();
 
 		var params = req.body;
-		project.name = params.name;
-		project.description = params.description;
-		project.category = params.category;
-		project.year = params.year;
-		project.langs = params.langs;
-		project.image = null;
+			project.name = params.name;
+			project.description = params.description;
+			project.category = params.category;
+			project.year = params.year;
+			project.langs = params.langs;
+			project.image = null;
 
 		project.save((err, projectStored) => {
 			if(err) return res.status(500).send({message: 'Error al guardar el documento.'});
@@ -35,7 +35,8 @@ var controller = {
 			if(!projectStored) return res.status(404).send({message: 'No se ha podido guardar el proyecto.'});
 
 			return res.status(200).send({project: projectStored});
-		});
+			});
+		
 	},
 
 	getProject: function(req, res){

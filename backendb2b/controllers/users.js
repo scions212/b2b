@@ -4,6 +4,7 @@ var User = require('../models/users');
 
 var fs = require('fs');
 var path = require('path');
+var bcrypt = require('bcrypt');
 
 var controller = {
 	
@@ -23,16 +24,14 @@ var controller = {
 		var user = new User();
 
 		var params = req.body;	
-        user.idUser = params.idUser;
         user.name = params.name;
 		user.lastname = params.lastname;
 		user.email = params.email;
-		user.idCard = params.idCard;
-		user.positionCompany = params.positionCompany;
-        user.departament = params.departament;
+		user.password = bcrypt.hashSync(params.password,10);
         user.photoPerfile = null;
 
 		user.save((err, userStored) => {
+			console.log(err)
 			if (err) return res.status(500).send({
 				message: 'Error al guardar el documento.'
 			});
@@ -46,8 +45,7 @@ var controller = {
 			});
 		});
 	},
-
-	
+			
 	getUser: function(req, res){
 		var userId = req.params.id;
 
@@ -115,7 +113,7 @@ var controller = {
 		var fileName = 'Imagen no subida...';
 
 		if(req.files){
-			var filePath = req.files.photoPerfile.path;
+			var filePath = req.files.photoProfile.path;
 			var fileSplit = filePath.split('\\');
 			var fileName = fileSplit[1];
 			var extSplit = fileName.split('\.');
@@ -123,7 +121,7 @@ var controller = {
 
 			if(fileExt == 'png' || fileExt == 'JPG' ||fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
 
-				User.findByIdAndUpdate(userId, {photoPerfile: fileName}, {new: true}, (err, userUpdated) => {
+				User.findByIdAndUpdate(userId, {photoProfile: fileName}, {new: true}, (err, userUpdated) => {
 					if(err) return res.status(500).send({message: 'La imagen no se ha subido'});
 
 					if(!userUpdated) return res.status(404).send({message: 'El proyecto no existe y no se ha asignado la imagen'});
@@ -148,7 +146,7 @@ var controller = {
 	},
 
 	getImageFile: function(req, res){
-		var file = req.params.photoPerfile;
+		var file = req.params.photoProfile;
 		var path_file = './uploads/'+file;
 
 		fs.exists(path_file, (exists) => {
@@ -165,6 +163,10 @@ var controller = {
 };
 
 module.exports = controller;
+
+
+
+
 
 
 

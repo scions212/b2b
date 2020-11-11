@@ -5,12 +5,9 @@ var Schema = mongoose.Schema;
 
 var MessageSchema = new Schema({
 
-
-                idMessage:{ type:String, required:true, trim:true,unique:true},
-                messageContent: { type:String, required:true, trim:true },
-                idConversation:{ type:String, required:true, trim:true },
-                idStatusMessage: { type:Boolean, required:true, trim:true, unique:true },
-                idUser:{ type:String, required:true, trim:true, unique:true },
+                messageContent: { type:String, required:true},
+                idStatusMessage: { type:Boolean, required: { type:String, default:'false'}},
+                idUser:{ type: Schema.ObjectId, ref:'User' },
                 urlFile:{type:String,},
             },{ 	versionKey:false,
                     timestamps:true,

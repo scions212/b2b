@@ -5,10 +5,11 @@ var Schema = mongoose.Schema;
 
 var ChatSchema = new Schema({
 
-    nameChat:{ type:String, required:true, trim:true,unique:true},
-    idChat: { type:Number, required:true, trim:true },
-    idUser:{ type:Number, required:true, trim:true },
-    urlFile:{type:String,},
+    nameChat:{ type:String, trim:true, },
+    idUser:{ type: Schema.ObjectId, ref:'User' },
+    idContact: { type: Schema.ObjectId, ref:'Contact' },
+    urlFile:{type:String },
+
 },{ 	versionKey:false,
         timestamps:true,
 });

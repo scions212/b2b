@@ -23,15 +23,14 @@ var controller = {
 		var msg = new Msg();
 
 		var params = req.body;
-		msg.idMessage = params.idMessage;
-		msg.idConversation=params.idConversation;  
+		msg.idChat=params.idChat;  
 		msg.messageContent = params.messageContent;
 		msg.idStatusMessage = params.idStatusMessage;
 		msg.idUser = params.idUser;
-		msg.dateMessage = params.dateMessage;
 		msg.urlFile = null;
 
 		msg.save((err, msgStored) => {
+			console.log(err)
 			if (err) return res.status(500).send({
 				message: 'Error al guardar el documento.'
 			});
