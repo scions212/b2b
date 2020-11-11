@@ -284,6 +284,20 @@ var controller = {
         });
     },
 
+    deleteUsusario: function(req, res){
+        var usuarioId= req.params.usuarioId;
+
+		Usuario.findByIdAndRemove(usuarioId, (err, usuarioRemoved) => {
+			if(err) return res.status(500).send({message: 'No se ha encontrado el usuario'});
+
+			if(!usuarioRemoved) return res.status(404).send({message: "No se puede eliminar el usuario"});
+
+			return res.status(200).send({
+				usuario: usuarioRemoved
+			});
+		});
+    },	
+    
     uploadPhotoProfile: function(req,res){
         //configurar el modulo mutiparty (subida de fichero)
 

@@ -143,7 +143,7 @@ var controller={
             }
             
             if(!group){    
-                return  res.status(404).send({
+                return  res.status(404).send({  
                     status:'error', 
                     message:'no existe el grupo'
                 });

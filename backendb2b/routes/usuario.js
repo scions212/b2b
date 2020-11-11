@@ -18,6 +18,7 @@ router.get('/GET_USUARIO/:usuarioId', UsuarioController.getUsuario);
 router.post('/POST_USUARIO', UsuarioController.save);
 router.post('/POST_LOGIN', UsuarioController.login);
 router.put('/PUT_USUARIO/:usuarioId', md_auth.authenticated, UsuarioController.update);
+router.delete('/DELETE_USUARIO/:usuarioId', md_auth.authenticated, UsuarioController.deleteUsusario );
 router.post('/UploadProfile',[md_upload,md_auth.authenticated], UsuarioController.uploadPhotoProfile);
 router.get('/photoProfile/:fileName', UsuarioController.photoProfile);
 
