@@ -33,19 +33,23 @@ var controller={
                                 //validar datos
                     try{
                         var validate_messageContent = !validator.isEmpty(req.body.messageContent);  
-                        var validate_idStatusMessage = !validator.isEmpty(req.body.idStatusMessage);        
+                        var validate_idStatusMessage = !validator.isEmpty(req.body.idStatusMessage);  
+                        
+                        //var validate_urlFile= ! validator.isEmpty(req.files.urlFile.path);
                     }catch(err){
                             return  res.status(200).send({
                                 message:'no has comentado nada', 
                         });
                     }
                     
-                if (validate_messageContent && validate_idStatusMessage) {
+                if (validate_messageContent && validate_idStatusMessage /*&& validate_urlFile*/) {
 
                     var message={
-                        ususario : req.usuario.sub,
+                        usuario : req.usuario.sub,
                         messageContent: req.body.messageContent,
-                        idStatusMessage: req.body.idStatusMessage
+                        idStatusMessage: req.body.idStatusMessage,
+                       // urlFile :req.files.urlFile.path,
+                        
                     };
                 //en la propiedad coments del objeto resultante hacer un push
                 group.messages.push(message);
@@ -53,7 +57,7 @@ var controller={
                 //guardar el topic completo
                 group.save((err,)=>{
                     if(err){
-                        return  res.status(500).send({
+                        return  res.status(500).send({ 
                             status: 'error',
                             message:'Error a guardar el mensaje'
                         });
@@ -79,27 +83,28 @@ var controller={
     updateMssg :function (req, res) {
 
         //Conseguir ID de comentario por url
-        var messageId = req.body.messageId;
-
+        var messagesId = req.params.messagesId;
+        console.log(messagesId);
         //recoger datos y validar
         var params = req.body;
-            //validar datos
+        console.log(params);
+            //validar datos  
             try{
-                var validate_messageId = !validator.isEmpty(req.body.validate_messageId);  
-            }catch(err){
+                var validate_messageContent = !validator.isEmpty(params.validate_messageContent);  
+            }catch(err){ 
                     return  res.status(200).send({
                         message:'no has comentado nada', 
                 });
             }
-            if(validate_messageId) {
-                // find and update del subdocumento del comentario
+            if(validate_messageContent) {
+                // find and update del subdocumento del comentario 
                 Group.findByIdAndUpdate(
-                    {" message._id": messageId },
+                    {" messages._id": messagesId },
                     {
                         "$set": {
-                            "message.$.messageContent":params.messageContent
+                            "messages.$.messageContent":params.messageContent
                         }
-                    },
+                    }, 
                     {new:true}, 
                     (err,groupUpdated)=>{
                        
@@ -127,6 +132,66 @@ var controller={
         
     },
 
+    putGroup:function (req,res) {
+
+        //recoger el id de la conversacion de la url
+        var messagesId = req.params.messagesId;
+        console.log(messagesId);
+        //recoger datos y validar
+        var params = req.body;
+        console.log(params);
+        //validar datos
+        try{
+            var validate_messageContent = !validator.isEmpty(params.messageContent);
+            
+        }catch(err){
+                return  res.status(200).send({
+                    message:'faltan datos por enviar // PUT', 
+            });
+        }
+
+        if(validate_messageContent) {
+            //montar un json con los datos modificables
+            var update={
+                messageContent: params.messageContent,
+               
+            };
+
+        //find and update del topic por id y por id de usuario
+            Group.findOneAndUpdate({ _id: messagesId, usuario : req.usuario.sub}, update, {new:true}, (err,groupUpdated)=>{
+                console.log(groupUpdated); 
+                if (err) {
+                 return res.status(500).send({
+                      status:'error',
+                      message:'error en la peticion  grupo',
+                    });   
+                }
+
+                if (!groupUpdated) {
+                    return res.status(404).send({
+                        status:'error',
+                        message:'Error no se ha actualizado el grupo  ',
+                      }); 
+                }
+
+
+               
+        //devolver respuesta 
+            return res.status(200).send({
+                status:'success',
+                group:groupUpdated
+                }); 
+            });
+       
+        }else{
+            return res.status(200).send({
+                status:'error',
+                message:'la validacion de los datos no es correcta ',
+            }); 
+
+        }
+    },
+
     deleteMssg: function (req, res) {
         //Sacar el id del grupo y el comentario y del comentario a borrar
         var groupId = req.params.groupId;
@@ -149,7 +214,7 @@ var controller={
                 });
             }   
 
-        //seleccionar el subdocumento (comentarop)
+        //seleccionar el subdocumento (comentario)
         var message = group.messages.id(messageId);
 
         //borrar el comentario
@@ -212,12 +277,13 @@ var controller={
         }); 
     },  
     
-    uploadPhotoProfile: function(req,res){
+    uploadUrlFile: function(req,res){
         //configurar el modulo mutiparty (subida de fichero)
 
         //recoger el fichero de la peticion
         var urlFile = 'Imagen no se ha podido subir...';
         
+    
         if(!req.files){
 
             return res.status(404).send({
@@ -229,8 +295,7 @@ var controller={
        // conseguir el nombre y la extension del archivo
        var file_path= req.files.urlFile.path;
        var file_split = file_path.split('\\');
-       console.log(file_path);
-
+     
         //nombre del archivo
        var file_name= file_split[2];
        
@@ -250,32 +315,116 @@ var controller={
                     });
             });
 
-        }else{
-       //sacar el id del usuario identificado
-            var usuarioId= req.usuario.sub;
-       //buscar y actualizar documentos de la bd
-       Message.findOneAndUpdate({ _id: usuarioId}, {urlFile:file_name}, {new:true}, (err, messageUpdated)=>{
-            
-        if(err || !messageUpdated){
+         }else{
+            var messageId = req.params.messageId;
 
-            //devolver respuesta 
-            return res.status(500).send({
-                status:'error',
-                message:'Error al guardar el usuario',
-                    });
-                }
-            return res.status(200).send({
-                status:'succes',
-                message : messageUpdated
-                });
+            //recoger datos y validar
+            var params = req.params.messageId;
+                //validar datos
                 
-            });
-      
-        }
-    },
+            console.log(params);
+                    // find and update del subdocumento del comentario
+                    Group.findByIdAndUpdate(
+                        {" message._id": messageId },
+                        {
+                            "$set": {
+                                "message.$.urFile":params.urFile
+                            }
+                        },
+                        {new:true}, 
+                        (err,groupUpdated)=>{
+                           
+                            if(err){
+                                return   res.status(500).send({
+                                    status: 'error',
+                                    message:'Error en la Peticion'
+                                    
+                                });   
+                            }
+                            
+                            if(!groupUpdated){    
+                                return   res.status(404).send({
+                                    status:'error', 
+                                    message:'no existe el grupo'
+                                });
+                            }   
+                            console.log(path);
+                           //devolver los datos
+                           return  res.status(200).send({
+                                status:"success",
+                                group:groupUpdated
+                                });   
+                           });
+                   
+                 }
+},
+
+uploadUrlFile2: function(req,res){
+    //configurar el modulo mutiparty (subida de fichero)
+
+    //recoger el fichero de la peticion
+    var urlFile = 'Imagen no se ha podido subir...';
+
+    if(!req.files){
+
+        return res.status(404).send({
+            status:'error',
+            message: urlFile
+            
+        });
+    }
+   // conseguir el nombre y la extension del archivo
+   var file_path= req.files.urlFile.path;
+   var file_split = file_path.split('\\');
+   console.log(file_path);
+
+    //nombre del archivo
+   var file_name= file_split[2];
+   
+   //Extension del archivo
+   var ext_split = file_name.split('\.');
+   var file_ext = ext_split[1];
+
+   //comprobar extension(solo imagenes)
+    if (file_ext != 'png' && file_ext !='jpg' && file_ext !='jpeg' && 
+    file_ext !='gif'&& file_ext !='JPG'){
+        fs.unlink(file_path, () =>{
+            
+            return res.status(200).send({
+                status:'error',
+                message:'La Extension del Archivo no es valido',
+                file: file_ext
+                });
+        });
+       
+    }else{
+        //sacar el id del message 
+             var messageId= messageId;
+        //buscar y actualizar documentos de la bd
+        Message.findOneAndUpdate({ _id: messageId}, {urlFile:file_name}, {new:true}, (err, messageUpdated)=>{
+             
+         if(err || !messageUpdated){
+ 
+             //devolver respuesta 
+             return res.status(500).send({
+                 status:'error',
+                 message:'Error al guardar el mensaje',
+                     });
+                 }
+             return res.status(200).send({
+                 status:'succes',
+                 message : messageUpdated
+                 });
+                 
+             });
+       
+         }
+     },
+ 
+    
 
 
-    photoProfile :function(req,res){
+    urlFile :function(req,res){
         var file_name = req.params.file_name;
         var path_file = './uploads/users/'+'fileName';
 
@@ -291,8 +440,8 @@ var controller={
             }
         });
         
-    }
-
+    },
+    
 };
 
 module.exports= controller; 

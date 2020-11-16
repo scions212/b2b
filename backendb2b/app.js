@@ -15,6 +15,8 @@ var contact_routes = require('./routes/contact');
 var usuario_routes = require('./routes/usuario');
 var group_routes= require('./routes/group');
 var mensaje_routes= require('./routes/mensaje');
+var contacto_routes = require('./routes/contacto');
+
 
 
 
@@ -61,6 +63,7 @@ app.use('/api', contact_routes);
 app.use('/api', usuario_routes);
 app.use('/api', group_routes);
 app.use('/api', mensaje_routes);
+app.use('/api', contacto_routes);
 
 
 

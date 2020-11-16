@@ -2,17 +2,17 @@
 
 var mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
-var Contact = require('../models/contact');
+
 var Schema = mongoose.Schema;
 
 
 var MessageSchema =  new Schema({
 
     messageContent:{ type:String },
-    idstatusMessage:{ type:Boolean },
-    idUser:{ type:Schema.ObjectId, ref:'Usuario'},
+    idStatusMessage:{ type:Boolean },
+    usuario :{ type:Schema.ObjectId, ref:'Usuario'},
+    contact :[{type:Schema.ObjectId, ref:'Contact'}],
     urlFile:{ type:String, default:'Image.png'},
-    photoProfile:{ type:String, default:'Image.png'},
 },{ 	versionKey:false,
         timestamps:true, 
 
