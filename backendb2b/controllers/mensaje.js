@@ -237,6 +237,7 @@ var controller={
             });              
             }else{
                 return res.status(404).send({
+            
                     status:'error',
                     message:' No existe el comentario'
                 });

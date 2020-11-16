@@ -73,58 +73,59 @@ var controller={
 
 },
 
-    deleteMssg: function (req, res) {
+    deleteContac: function (req, res) {
         //Sacar el id del grupo y el comentario y del comentario a borrar
+        
         var usuarioId = req.params.usuarioId;
-        var contactoId = req.params.contactoId;
-
+        var contactosId = req.params.contactosId;
         // buscar el grupo
-        Usuario.findById(usuarioId, (err,usuario)=>{
 
+        Usuario.findById(usuarioId,(err,usuario) =>{
+            console.log(usuario);
             if(err){
                 return  res.status(500).send({
-                    status: 'error',
-                    message:'Error en la Peticion'
+                    status:'error',
+                    message:'Error en la peticion', 
                 });
             }
-            
-            if(!usuario){    
-                return  res.status(404).send({  
-                    status:'error', 
-                    message:'no existe el grupo'
+            if(!usuario){
+                return  res.status(404).send({
+                    status:'error',
+                    message:'No existe el UsuarioID', 
                 });
-            }   
+            }
 
         //seleccionar el subdocumento (comentario)
-        var contacto = usuario.contactos.id(usuarioId);
+        var contacto = usuario.contactos.id(contactosId);
 
         //borrar el comentario
-        if (contacto) {
-            contacto.remove();
-
-             //guardar el grupo
+            if(contacto){
+                contacto.remove();
+            //guardar el grupo
             usuario.save((err)=>{
+
                 if(err){
-                    return  res.status(500).send({
-                        status: 'error',
-                        message:'Error en la Peticion'
+                    return res.status(200).send({
+                        status:'success',
+                        message:'Soy el metodo Delete'
                     });
                 }
-                //devolver el resultado
-                return   res.status(200).send({
-                    status:'success',
-                    usuario
+                
+            //devolver el resultado
+            return res.status(200).send({
+                status:'success',
+                usuario
                 });
-            });              
+            });
+
             }else{
-                return res.status(404).send({
+                return  res.status(404).send({
                     status:'error',
-                    message:' No existe el comentario'
-                });
-            }  
+                    message:'No existe el contactoID', 
+                    });
+                }
         });
     },
-
 };
    
 module.exports= controller; 
