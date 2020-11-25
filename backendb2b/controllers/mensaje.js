@@ -237,7 +237,7 @@ var controller={
 
                 // find and update del subdocumento del comentario 
                 Group.findOneAndUpdate(
-                    { "messages._id": messagesId },
+                    { "messages._id": messagesId},
                     {
                         "$set": {
                             "messages.$.urlFile":params.urlFile
