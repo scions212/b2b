@@ -11,7 +11,6 @@ var MessageSchema =  new Schema({
     messageContent:{ type:String },
     idStatusMessage:{ type:Boolean },
     usuario :{ type:Schema.ObjectId, ref:'Usuario'},
-    contact :[{type:Schema.ObjectId, ref:'Contact'}],
     urlFile:{ type:String, default:'Image.png'},
 },{ 	versionKey:false,
         timestamps:true, 
@@ -24,7 +23,7 @@ var Message = mongoose.model('Message' ,MessageSchema);
 var GroupsSchema =  new Schema({
     nameChat:{ type:String },
     usuario :{ type:Schema.ObjectId, ref:'Usuario'},
-    contact :[{type:Schema.ObjectId, ref:'Contact'}], 
+    contactos :[{type:Schema.ObjectId, ref:'Contacto'}], 
     messageContent:{ type:String },
     messages:[MessageSchema] 
 },{ 	versionKey:false,

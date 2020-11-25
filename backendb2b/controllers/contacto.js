@@ -29,8 +29,7 @@ var controller={
             if(req.body.email){
                 try{
                     var validate_email = !validator.isEmpty(req.body.email);  
-                                           
-                    //var validate_urlFile= ! validator.isEmpty(req.files.urlFile.path);
+
                 }catch(err){
                         return  res.status(200).send({
                             message:'no has comentado nada', 
@@ -40,12 +39,12 @@ var controller={
             if(validate_email){
 
 
-                var contacto = {
+                var contactos = {
                     usuario: req.usuario.sub,
                     email: req.body.email,
                 };
 
-                usuario.contactos.push(contacto);
+                usuario.contactos.push(contactos);
 
                 usuario.save((err)=>{
 
@@ -58,7 +57,8 @@ var controller={
 
                 return  res.status(200).send({
                     status:'status',
-                    message:'Se ha añadido el contacto  ', 
+                    message:'Se ha añadido el contacto  ',
+                    usuario
                     });
                 });
 

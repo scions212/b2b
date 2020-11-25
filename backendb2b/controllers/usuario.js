@@ -74,6 +74,7 @@ var controller = {
                         usuario.password=hash;
                        //Guarda el Usuario
                        usuario.save((err, usuarioStored)=>{
+                           console.log(err, usuarioStored);
                         if (err){
                             return res.status(500).send({
                                 message: 'Error al guardar el usuario. // Save'
