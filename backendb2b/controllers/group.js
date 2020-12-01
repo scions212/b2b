@@ -34,7 +34,7 @@ var controller = {
             var group = new Group();
         //asignar valores
             group.nameChat = params.nameChat;
-            group.usuario = req.usuario.sub;
+            group.user = req.user.sub;
             group.contact = params.contact;
             group.urlFile=null;
 
@@ -74,7 +74,7 @@ var controller = {
         //indicar las opciones  de la paginacion
         var options ={
             sort:{ createdAt: -1},
-            populate:'usuario'
+            populate:'user'
         };
         //find message
 
@@ -106,9 +106,9 @@ var controller = {
 
         //conseguir el id del usuario
 
-        var usuario = req.params.usuario;
+        var user = req.params.user;
         Group.find({
-            usuario:usuario
+            user:user
         })
         .sort([['createdAt', 'descending']])
         .exec((err,group)=> {
@@ -178,15 +178,15 @@ var controller = {
                     message:'faltan datos por enviar // PUT', 
             });
         }
-
+        
         if(validate_nameChat) {
             //montar un json con los datos modificables
             var update={
                 nameChat: params.nameChat
             };
-
+            console.log(update);
         //find and update del topic por id y por id de usuario
-            Group.findOneAndUpdate({ _id: groupId, usuario : req.usuario.sub}, update, {new:true}, (err,groupUpdated)=>{
+            Group.findOneAndUpdate({ _id: groupId, user : req.user.sub}, update, {new:true}, (err,groupUpdated)=>{
                 
                 if (err) {
                  return res.status(500).send({
@@ -194,7 +194,7 @@ var controller = {
                       message:'error en la peticion  grupo',
                     });   
                 }
-
+                console.log(groupUpdated);
                 if (!groupUpdated) {
                     return res.status(404).send({
                         status:'error',
@@ -222,7 +222,7 @@ var controller = {
         //sacar el id del grupo de la url
         var groupId = req.params.id;
         //find and delete por groupID y por usuarioID
-        Group.findByIdAndDelete({_id: groupId, usuario: req.usuario.sub}, (err,groupRemoved)=>{
+        Group.findByIdAndDelete({_id: groupId, user: req.user.sub}, (err,groupRemoved)=>{
 
             if (err) {
                 return res.stats(500).send({

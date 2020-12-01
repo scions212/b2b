@@ -1,192 +1,296 @@
 'use strict'
+const mongoose = require('mongoose');
+var validator=require('validator');
+var Group = require('../models/group');
+var Message = require('../models/group');
+var fs =require('fs');
+var path=require('path');
 
-var Msg = require('../models/message');
+var controller={
 
-var fs = require('fs');
-var path = require('path');
+    
+    addMssg: function (req, res) {
 
-var controller = {
+        //recoger el id del topic de la URL
+        var groupId = req.params.groupId;
 
-	home: function (req, res) {
-		return res.status(200).send({
-			message: 'Soy la home'
-		});
-	},
+        //find por id del topic
+            Group.findById(groupId).exec((err,group)=>{
+                if(err){
+                    return res.status(500).send({
+                        status: 'error',
+                        message:'Error en la Peticion'
+                    });
+                }
+                
+                if(!group){    
+                    return  res.status(404).send({
+                        status:'error', 
+                        message:'no existe el grupo'
+                    });
+                }
 
-	test: function (req, res) {
-		return res.status(200).send({
-			message: "Soy el metodo o accion test del controlador de bot"
-		});
-	},
+                //comprar que el ojeto del usuario y validar los datos
+                if (req.body.messageContent) {
+                                //validar datos
+                    try{
+                        var validate_messageContent = !validator.isEmpty(req.body.messageContent);  
+                        var validate_idStatusMessage = !validator.isEmpty(req.body.idStatusMessage);  
+                        
+                        //var validate_urlFile= ! validator.isEmpty(req.files.urlFile.path);
+                    }catch(err){
+                            return  res.status(200).send({
+                                message:'no has comentado nada', 
+                        });
+                    }
+                    
+                if (validate_messageContent && validate_idStatusMessage /*&& validate_urlFile*/) {
 
-	saveMsg: function (req, res) {
-		var msg = new Msg();
+                    var message={
+                        user : req.user.sub,
+                        messageContent: req.body.messageContent,
+                        idStatusMessage: req.body.idStatusMessage,
+                       // urlFile :req.files.urlFile.path,
+                        
+                    };
+                //en la propiedad coments del objeto resultante hacer un push
+                group.messages.push(message);
 
-		var params = req.body;
-		msg.idChat=params.idChat;  
-		msg.messageContent = params.messageContent;
-		msg.idStatusMessage = params.idStatusMessage;
-		msg.idUser = params.idUser;
-		msg.urlFile = null;
+                //guardar el topic completo
+                group.save((err,)=>{
+                    if(err){
+                        return  res.status(500).send({ 
+                            status: 'error',
+                            message:'Error a guardar el mensaje'
+                        });
+                    }
 
-		msg.save((err, msgStored) => {
-			console.log(err)
-			if (err) return res.status(500).send({
-				message: 'Error al guardar el documento.'
-			});
+                //devolver respuessta
+                return res.status(200).send({
+                    status:'success',
+                    group
+                });
+                    });
 
-			if (!msgStored) return res.status(404).send({
-				message: 'No se ha podido guardar el proyecto.'
-			});
+                    }else{
+                            return  res.status(200).send({
+                                message:'no se han validado los datos del comentario ', 
+                        });
+                    } 
+                }
+      
+        });
+    },
+    
+    deleteMssg: function (req, res) {
+        //Sacar el id del grupo y el comentario y del comentario a borrar
+        var groupId = req.params.groupId;
+        var messageId = req.params.messageId;
 
-			return res.status(200).send({
-				msg: msgStored
-			});
-		});
-	},
-	getMsg: function (req, res) {
-		var msgId = req.params.id;
+        // buscar el grupo
+        Group.findById(groupId, (err,group)=>{
 
-		if (msgId == null) return res.status(404).send({
-			message: 'El proyecto no existe.'
-		});
+            if(err){
+                return  res.status(500).send({
+                    status: 'error',
+                    message:'Error en la Peticion'
+                });
+            }
+            
+            if(!group){    
+                return  res.status(404).send({  
+                    status:'error', 
+                    message:'no existe el grupo'
+                });
+            }   
 
-		Msg.findById(msgId, (err, msg) => {
+        //seleccionar el subdocumento (comentario)
+        var message = group.messages.id(messageId);
 
-			if (err) return res.status(500).send({
-				message: 'Error al devolver los datos.'
-			});
+        //borrar el comentario
+        if (message) {
+            message.remove();
 
-			if (!msg) return res.status(404).send({
-				message: 'El proyecto no existe.'
-			});
+             //guardar el grupo
+            group.save((err)=>{
+                if(err){
+                    return  res.status(500).send({
+                        status: 'error',
+                        message:'Error en la Peticion'
+                    });
+                }
+                //devolver el resultado
+                return   res.status(200).send({
+                    status:'success',
+                    group
+                });
+            });              
+            }else{
+                return res.status(404).send({
+            
+                    status:'error',
+                    message:' No existe el comentario'
+                });
+            }  
+        });
+    },
 
-			return res.status(200).send({
-				msg
-			});
 
-		});
-	},
+    updateMssg:function (req, res) {
 
-	getMsgs: function (req, res) {
+        //Conseguir ID de comentario por url
+        var messagesId = req.params.messagesId;
+     
+        //recoger datos y validar
+        var params = req.body;
+       
+        
+            //validar datos  
+            try{
+                var validate_messageContent = !validator.isEmpty(params.messageContent);  
+            }catch(err){ 
+                    return  res.status(200).send({
+                        message:'no has comentado nada', 
+                });
+            }
+            if(validate_messageContent) {
+                // find and update del subdocumento del comentario 
+                Group.findOneAndUpdate(
+                    { "messages._id": messagesId },
+                    {
+                        "$set": {
+                            "messages.$.messageContent":params.messageContent
+                        }
+                    }, 
+                    {new:true},
+                    (err,groupUpdated)=>{
+                    console.log(err,groupUpdated);
+    
+                        if(err){
+                            return   res.status(500).send({
+                                status: 'error',
+                                message:'Error en la Peticion'
+                            });
+                        }
+                        
+                        if(!groupUpdated){    
+                            return   res.status(404).send({
+                                status:'error', 
+                                message:'no existe el grupo'
+                            });
+                        }   
+                       //devolver los datos
+                       return  res.status(200).send({
+                            status:"success",
+                            group:groupUpdated
+                            });   
+                       }); 
+             }
+    },
+    
 
-		Msg.find({}).sort('-year').exec((err, msgs) => {
+    uploadUrlFile:function (req, res) {  
+       
+       
+        //recoger el fichero de la peticion
+        var urlFile = 'Avatar no subido...';
+    
+        if(!req.files){
 
-			if (err) return res.status(500).send({
-				message: 'Error al devolver los datos.'
-			});
+            return res.status(404).send({
+                status:'error',
+                message: urlFile
+            });
+        }
+       // conseguir el nombre y la extension del archivo
+       var file_path= req.files.urlFile.path;
+       var file_split = file_path.split('\\');
+    
+        //nombre del archivo
+       var file_name= file_split[2];
+       
+       //Extension del archivo
+       var ext_split = file_name.split('\.');
+       var file_ext = ext_split[1];
 
-			if (!msgs) return res.status(404).send({
-				message: 'No hay projectos que mostrar.'
-			});
+       //comprobar extension(solo imagenes)
+        if (file_ext != 'png' && file_ext !='jpg' && file_ext !='jpeg' && 
+        file_ext !='gif'&& file_ext !='JPG'){
+            fs.unlink(file_path, () =>{
+                
+                return res.status(200).send({
+                    status:'error',
+                    message:'La Extension del Archivo no es valido',
+                    file: file_ext
+                    });
+            });
+        }else{
+         
+        //Conseguir ID del mensaje por url
+        var messagesId = req.params.messagesId;
 
-			return res.status(200).send({
-				msgs
-			});
-		});
+         //recoger datos y validar
+         var params = req.body;
 
-	},
+        //recoger datos y validar
+         // var params = req.files;
 
-	updateMsg: function (req, res) {
-		var msgId = req.params.id;
-		var update = req.body;
+                // find and update del subdocumento del comentario 
+                Group.findOneAndUpdate(
+                    { "messages._id": messagesId},
+                    {
+                        "$set": {
+                            "messages.$.urlFile":params.urlFile
+                        }
+                    }, 
+                    {new:true},
+                    (err,groupUpdated)=>{
+                    
+                        console.log(messagesId,params.urlFile);
+                        
+                        if(err){
+                            return   res.status(500).send({
+                                status: 'error',
+                                message:'Error en la Peticion'
+                            });
+                        }
+                        
+                        if(!groupUpdated){    
+                            return   res.status(404).send({
+                                status:'error', 
+                                message:'no existe el grupo'
+                            });
+                        }   
+                       //devolver los datos
+                       return  res.status(200).send({
+                            status:"success",
+                            group:groupUpdated
+                            });   
+                       }); 
+            
+        }
 
-		Msg.findByIdAndUpdate(msgId, update, {
-			new: true
-		}, (err, msgUpdated) => {
-			if (err) return res.status(500).send({
-				message: 'Error al actualizar'
-			});
+    },
 
-			if (!msgUpdated) return res.status(404).send({
-				message: 'No existe el proyecto para actualizar'
-			});
 
-			return res.status(200).send({
-				msg: msgUpdated
-			});
-		});
+    urlFile :function( req , res){
+        var file_name = req.params.file_name;
+        var path_file = './uploads/users/'+'fileName';
 
-	},
+        fs.exists(path_file , (exists)=>{
 
-	deleteMsg: function (req, res) {
-		var userId = req.params.id;
-
-		Msg.findByIdAndRemove(userId, (err, msgRemoved) => {
-			if (err) return res.status(500).send({
-				message: 'No se ha podido borrar el proyecto'
-			});
-
-			if (!msgRemoved) return res.status(404).send({
-				message: "No se puede eliminar ese proyecto."
-			});
-
-			return res.status(200).send({
-				msg: msgRemoved
-			});
-		});
-	},
-
-	uploadImage: function (req, res) {
-		var msgId = req.params.id;
-		var fileName = 'Imagen no subida...';
-
-		if (req.files) {
-			var filePath = req.files.urlFile.path;
-			var fileSplit = filePath.split('\\');
-			var fileName = fileSplit[1];
-			var extSplit = fileName.split('\.');
-			var fileExt = extSplit[1];
-
-			if (fileExt == 'png' || fileExt == 'JPG' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif') {
-
-				Msg.findByIdAndUpdate(msgId, {
-					urlFile: fileName
-				}, {
-					new: true
-				}, (err, msgUpdated) => {
-					if (err) return res.status(500).send({
-						message: 'La imagen no se ha subido'
-					});
-
-					if (!msgUpdated) return res.status(404).send({
-						message: 'El proyecto no existe y no se ha asignado la imagen'
-					});
-
-					return res.status(200).send({
-						msg: msgUpdated
-					});
-				});
-
-			} else {
-				fs.unlink(filePath, (err) => {
-					return res.status(200).send({
-						message: 'La extensión no es válida'
-					});
-				});
-			}
-
-		} else {
-			return res.status(200).send({
-				message: fileName
-			});
-		}
-	},
-
-	getImageFile: function (req, res) {
-		var file = req.params.urlFile;
-		var path_file = './uploads/' + file;
-
-		fs.exists(path_file, (exists) => {
-			if (exists) {
-				return res.sendFile(path.resolve(path_file));
-			} else {
-				return res.status(200).send({
-					message: "No existe la imagen..."
-				});
-			}
-		});
-	}
+            if (exists) {
+                //envia el archivo resolviendo el path completo de donde esta ubicada el archivo
+                return res.sendFile(path.resolve(path_file));
+            }else{
+                return res.status(404).send({
+                    message:'la image no existe'
+                });
+            }
+        });
+        
+    },
+    
 };
 
-module.exports = controller;
+module.exports= controller; 

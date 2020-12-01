@@ -33,7 +33,7 @@ exports.authenticated = function (req, res, next) {
     
     }
     //adjuntar usuario identificado a request
-    req.usuario = payload;
+    req.user = payload;
     //pasar a la accion 
     console.log('estas pasando por el middleware');
 

@@ -6,10 +6,10 @@ var Schema = mongoose.Schema;
 
 var ContactSchema =  new Schema({
 
-    usuario :{ type:Schema.ObjectId, ref:'Usuario'},
-    nph:{ type:Number, trim:true, require:true},
-},{ 	versionKey:false,
-        timestamps:true,      
+      user :{ type:Schema.ObjectId, ref:'User'},
+      email: { type:String, unique:true, trim:true, require:true}
+      },{ 	versionKey:false,
+            timestamps:true,      
 });
 
 

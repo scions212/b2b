@@ -7,15 +7,11 @@ const morgan = require('morgan');
 
 // cargar archivos rutas
 
-var project_routes = require('./routes/project');
-var chat_routes = require('./routes/chat');
-var message_routes = require('./routes/message');
-//var user_routes = require('./routes/users');
-//var contact_routes = require('./routes/contact');
-var usuario_routes = require('./routes/usuario');
+
+var user_routes = require('./routes/user');
 var group_routes= require('./routes/group');
-var mensaje_routes= require('./routes/mensaje');
-var contacto_routes = require('./routes/contacto');
+var message_routes= require('./routes/message');
+var contact_routes = require('./routes/contact');
 
 
 
@@ -55,15 +51,11 @@ app.post('/test1',(req,res) => {
 
 // rutas
 
-app.use('/api', project_routes);
-app.use('/api', chat_routes);
-app.use('/api', message_routes);
-//app.use('/api', user_routes);
-//app.use('/api', contact_routes);
-app.use('/api', usuario_routes);
+
+app.use('/api', user_routes);
 app.use('/api', group_routes);
-app.use('/api', mensaje_routes);
-app.use('/api', contacto_routes);
+app.use('/api', message_routes);
+app.use('/api', contact_routes);
 
 
 

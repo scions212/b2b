@@ -1,13 +1,13 @@
 'use strict'
 
-var Usuario = require('../models/usuario');
+var User = require('../models/user');
 var validator =require('validator');
 var bcrypt = require('bcrypt');
 var fs =require('fs');
 var path=require('path');
 const saltRounds = 10;
 var jwt = require('../services/jwt');
-const { exists } = require('../models/usuario');
+const { exists } = require('../models/user');
 
 var controller = {
 //rutas o controladores de pruebas
@@ -50,37 +50,37 @@ var controller = {
 
 
 //Crea Objeto Usuario
-            var usuario = new Usuario();
+            var user = new User();
 	
-            usuario.name = params.name;
-            usuario.lastname = params.lastname;
-            usuario.email = params.email.toLowerCase();
-            usuario.password = bcrypt.hashSync(params.password,10);
-            usuario.nPhone= params.nPhone;
-            usuario.photoPerfile = null;
+            user.name = params.name;
+            user.lastname = params.lastname;
+            user.email = params.email.toLowerCase();
+            user.password = bcrypt.hashSync(params.password,10);
+            user.nPhone= params.nPhone;
+            user.photoPerfile = null;
 
 //Comprobar que el usuario existe
-                Usuario.findOne({ email:usuario.email}, (err, issetUsuario)=>{
+                User.findOne({ email:user.email}, (err, issetUser)=>{
                     if (err){
                          return res.status(500).send({
                         message: 'Error al comprobar el duplicidad el usuario. // Save '
                     });
                 }
 
-                if (!issetUsuario) {
+                if (!issetUser) {
 //Si no existe     
 //cifra la contraseña
                     bcrypt.hash(params.password, saltRounds, function(err, hash) {
-                        usuario.password=hash;
+                        user.password=hash;
                        //Guarda el Usuario
-                       usuario.save((err, usuarioStored)=>{
-                           console.log(err, usuarioStored);
+                       user.save((err, userStored)=>{
+                           console.log(err, userStored);
                         if (err){
                             return res.status(500).send({
                                 message: 'Error al guardar el usuario. // Save'
                                 });
                             }
-                        if(!usuarioStored){
+                        if(!userStored){
                             return res.status(400).send({
                                 message: 'El usuario no se ha guardado.// Save'
                                 });
@@ -89,7 +89,7 @@ var controller = {
                              //Devolver Respuestas  
                         return res.status(200).send({
                             status : 'success // Save',
-                            usuario: usuarioStored
+                            user: userStored
                             });
                        });//close save
                                       
@@ -128,13 +128,13 @@ var controller = {
                 });            
         }    
         //buscar usuarios que coinciden el email
-        Usuario.findOne({ email: params.email.toLowerCase()}, (err, usuario) =>{
+        User.findOne({ email: params.email.toLowerCase()}, (err, user) =>{
            
            if(err){ return res.status(500).send({
                 message:'error al intentar identificarse //login',
             });    
         }
-        if(!usuario){ 
+        if(!user){ 
             return res.status(400).send({
                 message:'el usuario no existe //login',
             });    
@@ -144,23 +144,23 @@ var controller = {
 
         //comprobar la contraseña (coincidencia de email y password / bycript)
 
-        bcrypt.compare(params.password, usuario.password,(err, check)=>{
+        bcrypt.compare(params.password, user.password,(err, check)=>{
         //si es correcto
             if(check){
          //generar token de jwt y devolverlo (mas tarde)
                 if(params.gettoken){
         //devolver los datos
                 return res.status(200).send({
-                 token:jwt.createToken(usuario)
+                 token:jwt.createToken(user)
                 });
             }else{
                 //limpiar el objeto
-                usuario.password=undefined;
+                user.password=undefined;
                            
                 //devolver los datos
                     return res.status(200).send({
                         status:'Success //login',
-                        usuario
+                        user
                     });
                 }
             
@@ -172,6 +172,8 @@ var controller = {
             });          
         });
     },
+
+
     //crear middleware para comprobar el jwt
     update : function (req,res) {
         //recoger datos del usuario
@@ -191,23 +193,23 @@ var controller = {
         //eliminar propiedades innecesarias
         delete params.password;
 
-        var usuarioId= req.usuario.sub;
-        console.log(req.usuario.email);
+        var userId= req.user.sub;
+        console.log(req.user.email);
  
-        if (req.usuario.email != params.email) {
-            Usuario.findOne({ email: params.email.toLowerCase()}, (err, usuario) =>{
+        if (req.user.email != params.email) {
+            User.findOne({ email: params.email.toLowerCase()}, (err, user) =>{
            
                 if(err){ return res.status(500).send({
                      message:'error al intentar identificarse //login',
                  });    
              }
-                if(usuario && usuario.email == params.email ){ 
+                if(user && user.email == params.email ){ 
                  return res.status(200).send({
                      message:'el Email no puede ser modificado //login',
                  });    
              }else{
                     //Buscar y actualizar documento
-            Usuario.findOneAndUpdate({ _id: usuarioId}, params, {new:true}, (err, usuarioUpdated)=>{
+            User.findOneAndUpdate({ _id: userId}, params, {new:true}, (err, userUpdated)=>{
                     if (err) {
                         return res.status(500).send({
                             status:'error',
@@ -215,7 +217,7 @@ var controller = {
                         });
                     }
 
-                    if(!usuarioUpdated) {
+                    if(!userUpdated) {
                         return res.status(200).send({
                             status:'error',
                             message:'no se a Actualizado el usuario'
@@ -224,14 +226,14 @@ var controller = {
                     //devolver respuesta
                     return res.status(200).send({
                         status:'success',
-                        usuario: usuarioUpdated
+                        user: userUpdated
                     });
                 });
              }
         });
     }else{
             //Buscar y actualizar documento
-        Usuario.findOneAndUpdate({ _id: usuarioId}, params, {new:true}, (err, usuarioUpdated)=>{
+        User.findOneAndUpdate({ _id: userId}, params, {new:true}, (err, userUpdated)=>{
                 if (err) {
                     return res.status(500).send({
                         status:'error',
@@ -239,7 +241,7 @@ var controller = {
                     });
                 }
 
-                if(!usuarioUpdated) {
+                if(!userUpdated) {
                     return res.status(200).send({
                         status:'error',
                         message:'no se a Actualizado el usuario'
@@ -248,15 +250,15 @@ var controller = {
                 //devolver respuesta
                 return res.status(200).send({
                     status:'success',
-                    usuario: usuarioUpdated
+                    user: userUpdated
                 });
             });
         }
     },
 
     getUsuarios: function (req,res){
-        Usuario.find().exec((err , usuarios)=>{
-            if(err || !usuarios){
+        User.find().exec((err , users)=>{
+            if(err || !users){
                 return res.status(404).send({
                     status:'error',
                     message:'no existen usuarios en la BD'
@@ -264,15 +266,15 @@ var controller = {
             }
                 return res.status(200).send({
                     status:'success',
-                    usuarios
+                    users
             });           
         });
     },
 
     getUsuario: function (req,res){
-        var usuarioId= req.params.usuarioId;
-        Usuario.findById(usuarioId).exec((err, usuario)=>{
-            if(err || !usuario){
+        var userId= req.params.userId;
+        User.findById(userId).exec((err, user)=>{
+            if(err || !user){
                 return res.status(404).send({
                     status:'error',
                     message:'no existen usuario en la BD'
@@ -280,21 +282,21 @@ var controller = {
             }
                 return res.status(200).send({
                     status:'success',
-                    usuario
+                    user
             });
         });
     },
 
     deleteUsusario: function(req, res){
-        var usuarioId= req.params.usuarioId;
+        var userId= req.params.userId;
 
-		Usuario.findByIdAndRemove(usuarioId, (err, usuarioRemoved) => {
+		User.findByIdAndRemove(userId, (err, userRemoved) => {
 			if(err) return res.status(500).send({message: 'No se ha encontrado el usuario'});
 
-			if(!usuarioRemoved) return res.status(404).send({message: "No se puede eliminar el usuario"});
+			if(!userRemoved) return res.status(404).send({message: "No se puede eliminar el usuario"});
 
 			return res.status(200).send({
-				usuario: usuarioRemoved
+				user: userRemoved
 			});
 		});
     },	
@@ -340,11 +342,11 @@ var controller = {
 
         }else{
        //sacar el id del usuario identificado
-            var usuarioId= req.usuario.sub;
+            var userId= req.user.sub;
        //buscar y actualizar documentos de la bd
-       Usuario.findOneAndUpdate({ _id: usuarioId}, {photoProfile:file_name}, {new:true}, (err, usuarioUpdated)=>{
+       User.findOneAndUpdate({ _id: userId}, {photoProfile:file_name}, {new:true}, (err, userUpdated)=>{
             
-        if(err || !usuarioUpdated){
+        if(err || !userUpdated){
 
             //devolver respuesta 
             return res.status(500).send({
@@ -354,7 +356,7 @@ var controller = {
                 }
             return res.status(200).send({
                 status:'succes',
-                usuario : usuarioUpdated
+                user : userUpdated
                 });
                 
             });

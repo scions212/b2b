@@ -1,22 +1,21 @@
+
 'use strict'
 
-var express = require('express');
-
-var MessageController=require('../controllers/message');
+var express=require('express');
+var MessageController =require('../controllers/message');
 
 var router = express.Router();
+var md_auth=require('../middleware/authenticated');
+
 
 var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart({ uploadDir: './uploads' });
+var md_upload = multipart({ uploadDir: './uploads/file'});
 
-router.get('/home', MessageController.home);
-router.post('/test', MessageController.test);
-router.post('/POST_MESSAGE', MessageController.saveMsg);
-router.get('/GET_MESSAGE/:id?', MessageController.getMsg);
-router.get('/GET_MESSAGES', MessageController.getMsgs);
-router.put('/PUT_MESSAGES/:id', MessageController.updateMsg);
-router.delete('/DELETE_MESSAGE/:id', MessageController.deleteMsg);
-router.post('/UPLOAD_IMAGE_MESSAGE/:id', multipartMiddleware, MessageController.uploadImage);
-router.get('/GET-IMAGE/:image', MessageController.getImageFile);
 
-module.exports = router;
+router.post('/POST_MESSAGE/:groupId', md_auth.authenticated,MessageController.addMssg);
+router.delete('/DELETE_MESSAGE/:groupId/:messageId', md_auth.authenticated,MessageController.deleteMssg);
+router.put('/uploadUrlFile/:messagesId',[md_upload,md_auth.authenticated], MessageController.uploadUrlFile);
+router.get('/urlFile/:fileName', MessageController.urlFile);
+
+
+module.exports = router; 

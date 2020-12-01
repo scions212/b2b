@@ -1,154 +1,131 @@
 'use strict'
 
-var Contact = require('../models/contact');
-var fs = require('fs');
-var path = require('path');
+var User = require('../models/user');
+var validator =require('validator');
+var Contact = require('../models/user');
 
-var controller = {
-	
-	home: function(req, res){
-		return res.status(200).send({
-			message: 'Soy la home'
-		});
-	},
+var controller={
 
-	test: function(req, res){
-		return res.status(200).send({
-			message: "Soy el metodo o accion test del controlador de Contact User"
-		});
-	},
+   
 
-	saveContact: function(req, res){
-		var contact = new Contact();
+    addContact: function (req, res) {
 
-		var params = req.body;
-		contact.idUser=params.idUser;
-		contact.nph=params.nph;
-	
+        var userId = req.params.userId;
 
-		contact.save((err, contactStored) => {
-			console.log(err)
-			if(err) return res.status(500).send({message: 'Error al guardar la info.'});
+        User.findById(userId).exec((err, user)=>{
+            
+            if(err){
+                return  res.status(500).send({
+                    status:'error',
+                    message:'Error en la peticion', 
+                });
+            }
+            if(!user){
+                return  res.status(500).send({
+                    status:'error',
+                    message:'No existe el tema', 
+                });
+            }
+            if(req.body.email){
+                try{
+                    var validate_email = !validator.isEmpty(req.body.email);  
 
-			if(!contactStored) return res.status(404).send({message: 'No se ha podido guardar el contacto.'});
+                }catch(err){
+                        return  res.status(200).send({
+                            message:'no has comentado nada', 
+                    });
+                }   
+            
+            if(validate_email){
 
-			return res.status(200).send({contact: contactStored});
-		});
-	},
 
-	getContact: function(req, res){
-		var contactId = req.params.id;
+                var contacts = {
+                    user: req.user.sub,
+                    email: req.body.email,
+                };
 
-		if(contactId == null) return res.status(404).send({message: 'El proyecto no existe.'});
+                user.contacts.push(contacts);
 
-		Contact.findById(contactId, (err, contact) => {
+                user.save((err)=>{
 
-			if(err) return res.status(500).send({message: 'Error al devolver los datos.'});
+                    if(err){
+                        return  res.status(500).send({
+                            status:'error',
+                            message:'Error al guardar el contacto', 
+                        });
+                    }
 
-			if(!contact) return res.status(404).send({message: 'El proyecto no existe.'});
+                return  res.status(200).send({
+                    status:'status',
+                    message:'Se ha añadido el contacto  ',
+                    user
+                    });
+                });
 
-			return res.status(200).send({
-				contact
-			});
+            }else{
+                    return  res.status(200).send({
+                        message:'no has comentado nada', 
+                });
+            }
+        }
+            
+     }); 
 
-		});
-	},
+},
 
-	getContacts: function(req, res){
+    deleteContac: function (req, res) {
+        //Sacar el id del grupo y el comentario y del comentario a borrar
+        
+        var userId = req.params.userId;
+        var contactId = req.params.contactId;
+        // buscar el grupo
 
-		Contact.find({}).sort('-year').exec((err, contact) => {
+        User.findById(userId,(err,user) =>{
+            console.log(user);
+            if(err){
+                return  res.status(500).send({
+                    status:'error',
+                    message:'Error en la peticion', 
+                });
+            }
+            if(!user){
+                return  res.status(404).send({
+                    status:'error',
+                    message:'No existe el UsuarioID', 
+                });
+            }
 
-			if(err) return res.status(500).send({message: 'Error al devolver los datos.'});
+        //seleccionar el subdocumento (comentario)
+        var contact = user.contacts.id(contactId);
 
-			if(!contact) return res.status(404).send({message: 'No hay projectos que mostrar.'});
+        //borrar el comentario
+            if(contact){
+                contact.remove();
+            //guardar el grupo
+            user.save((err)=>{
 
-			return res.status(200).send({contact});
-		});
+                if(err){
+                    return res.status(200).send({
+                        status:'success',
+                        message:'Soy el metodo Delete'
+                    });
+                }
+                
+            //devolver el resultado
+            return res.status(200).send({
+                status:'success',
+                user
+                });
+            });
 
-	},
-
-	updateContac: function(req, res){
-		var contactId = req.params.id;
-		var update = req.body;
-
-		Contact.findByIdAndUpdate(contactId, update, {new:true}, (err, contactUpdated) => {
-			if(err) return res.status(500).send({message: 'Error al actualizar'});
-
-			if(!contactUpdated) return res.status(404).send({message: 'No existe el proyecto para actualizar'});
-
-			return res.status(200).send({
-				contact: contactUpdated
-			});
-		});
-
-	},
-
-	deleteContact: function(req, res){
-		var contactId = req.params.id;
-
-		Contact.findByIdAndRemove(contactId, (err, contactRemoved) => {
-			if(err) return res.status(500).send({message: 'No se ha podido borrar el proyecto'});
-
-			if(!contactRemoved) return res.status(404).send({message: "No se puede eliminar ese proyecto."});
-
-			return res.status(200).send({
-				contact: contactRemoved
-			});
-		});
-	},
-
-	uploadImage: function(req, res){
-		var contactId = req.params.id;
-		var fileName = 'Imagen no subida...';
-
-		if(req.files){
-			var filePath = req.files.photoProfile.path;
-			var fileSplit = filePath.split('\\');
-			var fileName = fileSplit[1];
-			var extSplit = fileName.split('\.');
-			var fileExt = extSplit[1];
-
-			if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
-
-				Contact.findByIdAndUpdate(contactId, {photoProfile: fileName}, {new: true}, (err, contactUpdated) => {
-					if(err) return res.status(500).send({message: 'La imagen no se ha subido'});
-
-					if(!contactUpdated) return res.status(404).send({message: 'El proyecto no existe y no se ha asignado la imagen'});
-
-					return res.status(200).send({
-						contact: contactUpdated
-					});
-				});
-
-			}else{
-				fs.unlink(filePath, (err) => {
-					return res.status(200).send({message: 'La extensión no es válida'});
-				});
-			}
-
-		}else{
-			return res.status(200).send({
-				message: fileName
-			});
-		}
-
-	},
-
-	getImageFile: function(req, res){
-		var file = req.params.photoProfile;
-		var path_file = './uploads/'+file;
-
-		fs.exists(path_file, (exists) => {
-			if(exists){
-				return res.sendFile(path.resolve(path_file));
-			}else{
-				return res.status(200).send({
-					message: "No existe la imagen..."
-				});
-			}
-		});
-	}
-
+            }else{
+                return  res.status(404).send({
+                    status:'error',
+                    message:'No existe el contactoID', 
+                    });
+                }
+        });
+    },
 };
-
-module.exports = controller;
+   
+module.exports= controller; 
