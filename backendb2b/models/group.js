@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
+var User = require('../models/user');
 
 var Schema = mongoose.Schema;
 
@@ -28,7 +29,7 @@ var GroupsSchema =  new Schema({
     messages:[MessageSchema] 
 },{ 	versionKey:false,
         timestamps:true,      
-});
+})
 
 
 
