@@ -183,6 +183,7 @@ var controller = {
             //montar un json con los datos modificables
             var update={
                 nameChat: params.nameChat
+
             };
             console.log(update);
         //find and update del topic por id y por id de usuario
@@ -269,7 +270,7 @@ var controller = {
                     status:'error',
                     message:'Datos no encontrados'
                 }); 
-             }
+             } 
       
             //devolver el resultado
             return res.status(200).send({
