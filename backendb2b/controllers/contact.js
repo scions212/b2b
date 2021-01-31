@@ -6,7 +6,8 @@ var Contact = require('../models/user');
 
 var controller={
 
-   
+          
+    
 
     addContact: function (req, res) {
 
